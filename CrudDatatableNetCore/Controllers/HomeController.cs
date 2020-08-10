@@ -23,6 +23,17 @@ namespace CrudDatatableNetCore.Controllers
             return View();
         }
 
+        public IActionResult Courses()
+        {
+            return View();
+        }
+
+        public IActionResult Enrollments()
+        {
+            return View();
+        }
+
+
         public IActionResult Privacy()
         {
             return View();

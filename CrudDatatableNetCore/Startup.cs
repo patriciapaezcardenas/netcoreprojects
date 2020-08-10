@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CrudDatatableNetCore.Context;
+using CrudDatatableNetCore.IService;
+using CrudDatatableNetCore.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +28,18 @@ namespace CrudDatatableNetCore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddDbContext<DatabaseContext>(o=> o.UseSqlServer(Configuration.GetConnectionString("SchoolDB")));
+
+            services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<ICourseService, CourseService>();
+
+            services.AddControllersWithViews()
+                .AddJsonOptions(o =>
+                {
+                    o.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                    o.JsonSerializerOptions.PropertyNamingPolicy = null;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

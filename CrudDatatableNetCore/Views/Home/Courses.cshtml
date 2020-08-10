@@ -9,23 +9,21 @@
     }
 </style>
 
-<input type="text" id="txtStudentId" placeholder="Student Id" name="StudentID" style="display:none;" />
-<input type="text" id="txtFirstMidName" placeholder="First Name" name="FirstMidName" class="marginright5" />
-<input type="text" id="txtLastName" placeholder="Last Name" name="LastName" class="marginright5" />
-<input type="date" id="dtEnrollmentDate" placeholder="Enrollment Date" name="EnrollmentDate" class="marginright5" />
+<input type="text" id="txtCourseId" placeholder="Course Id" name="CourseID" style="display:none;" />
+<input type="text" id="txtTitle" placeholder="Title" name="Title" class="marginright5" />
+<input type="number" id="numCredits" placeholder="Credits" name="Credits" class="marginright5" />
 
 <button id="btnSave" class="btn btn-success marginright5">Save</button>
-<button id="btnAddNew" class="btn btn-primary marginright5">Add New Student</button>
+<button id="btnAddNew" class="btn btn-primary marginright5">Add New Course</button>
 
 <br />
 <br />
-<table id="tblStudents" class="table table-striped table-bordered">
+<table id="tblCourses" class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th>Student Id</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Enrollment Date</th>
+            <th>Course Id</th>
+            <th>Title</th>
+            <th>Credits</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -35,16 +33,15 @@
 
     $(document).ready(function () {
 
-        $('#tblStudents').DataTable({
+        $('#tblCourses').DataTable({
             "ajax": {
-                "url": "api/Student",
+                "url": "https://localhost:44355/api/Course",
                 "dataSrc": ""
             },
             columns: [
-                { data: "StudentID" },
-                { data: "FirstMidName" },
-                { data: "LastName" },
-                { data: "EnrollmentDate" },
+                { data: "CourseID" },
+                { data: "Title" },
+                { data: "Credits" },
                 {
                     data: "id", render: function (data, type, row, meta) {
                         return '<button class="btn btn-primary marginright5" onclick=Edit(' + JSON.stringify(row) + ')>Edit</button>' +
@@ -59,19 +56,18 @@
 
 
     $('#btnSave').click(function () {
-        var student = {
-            StudentId: $.trim($('#txtStudentId').val()) == "" ? 0 : $('#txtStudentId').val(),
-            FirstMidName: $('#txtFirstMidName').val(),
-            LastName: $('#txtLastName').val(),
-            EnrollmentDate: $('#dtEnrollmentDate').val()
+        var course = {
+            CourseID: $.trim($('#txtCourseId').val()) == "" ? 0 : $('#txtCourseId').val(),
+            Title: $('#txtTitle').val(),
+            Credits: $('#numCredits').val()
         }
 
         $.ajax({
-            url: "api/Student/",
-            data: student,
+            url: "https://localhost:44355/api/Course/",
+            data: course,
             type: "POST",
             success: function (result) {
-                alert(result)
+                alert('SAVED')
                 ReloadGrid();
                 Reset();
             },
@@ -117,18 +113,18 @@
 
 
 
-    function Edit(oStudent) {
-        $('#txtStudentId').val(oStudent.StudentID)
-        $('#txtFirstMidName').val(oStudent.FirstMidName)
-        $('#txtLastName').val(oStudent.LastName)
-        $('#dtEnrollmentDate').val(oStudent.EnrollmentDate)
+    function Edit(oCourse) {
+
+        $('#txtCourseId').val(oCourse.CourseID)
+        $('#txtTitle').val(oCourse.Title)
+        $('#numCredits').val(oCourse.Credits)
 
     }
 
-    function Delete(oStudent) {
+    function Delete(oCourse) {
         debugger
         $.ajax({
-            url: "api/Student/" + oStudent.StudentID,
+            url: "https://localhost:44355/api/Course/" + oCourse.CourseID,
             type: "DELETE",
             success: function (result) {
                 alert(result)
@@ -173,16 +169,16 @@
     function Reset() {
         let today = new Date();
 
-        $('#txtStudentId').val(0)
-        $('#txtFirstMidName').val("")
-        $('#txtLastName').val("")
-        $('#dtEnrollmentDate').val(today)
+        $('#txtCourseId').val(0)
+        $('#txtTitle').val("")
+        $('#numCredits').val(0)
 
     }
 
     function ReloadGrid() {
-        $('#tblStudents').DataTable().clear();
-        $('#tblStudents').DataTable().ajax.reload();
+
+        $('#tblCourses').DataTable().clear();
+        $('#tblCourses').DataTable().ajax.reload();
     }
 </script>
 
