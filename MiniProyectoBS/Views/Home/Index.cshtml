@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+<label for="albumsDropdown"><b>Students</b></label>
+<select class="form-control" id="albumsDropdown" name="albumsDropdown"></select>
+<button id="btnVisualizarAlbum" class="btn btn-success">Visualizar Álbum</button>
+
+<br />
+<br />
+<table id="tblalbums" class="table table-striped table-bordered"></table>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        albumsData = null;
+        photosData = null;
+        commentsData = null;
+
+        $.ajaxSetup({ cache: false });
+
+        $.ajax({
+            type: "GET",
+            url: "api/Data",
+            data: "{}",
+            async: false,
+            success: function (data) {
+                console.log(data);
+                albumsData = data.albums;
+                var s = '<option value="-1">Please Select an Album</option>';
+                for (var i = 0; i < albumsData.length; i++) {
+                    s += '<option value="' + albumsData[i].id + '">' + albumsData[i].title + '</option>';
+                }
+                $("#albumsDropdown").html(s);
+
+                photosData = data.photos;
+                commentsData = data.comments;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert("Error")
+                console.log(xhr.responseText)
+
+            },
+            complete: function () {
+
+
+            }
+
+        });
+
+        $.ajaxSetup({ cache: true });
+
+
+        $('#albumsDropdown').on('change', function () {
+            debugger
+            $('#tblalbums').DataTable().clear();
+            let albumId = this.value;
+            var dataSet = photosData.filter(function (value) { return value.albumId === parseInt(albumId) })
+            if (dataSet) {
+                if (dataSet.length > 0) {
+                    $('#tblalbums').DataTable({
+                        data: dataSet,
+                        columns: [
+                            { title: "PHOTO ID" },
+                            { title: "THUMBNAILURL" },
+                            { title: "TITLE" },
+                            { title: "URL" },
+                            {
+                                title: "id", render: function (data, type, row, meta) {
+                                    return '<button class="btn btn-primary marginright5" onclick=ViewComments(' + JSON.stringify(row) + ')>Ver Comentarios</button>'
+
+                                }
+                            }
+                        ]
+                    });
+                }
+
+            }
+
+
+
+        });
+
+
+    });
+
+    function ViewComments(photo) {
+        alert(photo)
+        var dataSet = commentsData.filter(function (value) { return value.postId === parseInt(photo.id) })
+        alert(dataSet)
+    
+    }
+
+
+</script>
