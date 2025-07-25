@@ -1,0 +1,25 @@
+@model AccountType
+@{
+    ViewData["Title"] = "Edit Account Type";
+}
+<h2>@ViewData["Title"]</h2>
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3 form-group">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3 form-group">
+        <label asp-for="Order" class="form-label"></label>
+        <input asp-for="Order" class="form-control"></input>
+        <span asp-validation-for="Order" class="text-danger"></span>
+    </div>
+    <div class="mb-3form-group">
+        <label asp-for="UserId" class="form-label"></label>
+        <textarea asp-for="UserId" class="form-control" readonly></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

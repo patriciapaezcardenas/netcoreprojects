@@ -1,0 +1,17 @@
+@model AccountType
+
+@{
+    ViewData["Title"] = "Delete Account Type";
+}
+<h2>Delete Account Type @Model.Name</h2>
+<h3>¿Está seguro de eliminar el registro?"</h3>
+<form asp-controller="AccountType" asp-action="Delete" lass="mb-3 form-group">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Confirmar</button>
+    <a class="btn btn-secondary" asp-controller="AccountType" asp-action="Index">Cancelar</a>
+</form>
+
+
+
+
+
